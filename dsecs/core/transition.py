@@ -15,14 +15,16 @@ def _clamp(v: float, lo: float = 0.0, hi: float = 1.0) -> float:
     return max(lo, min(hi, v))
 
 
-def transition(state: State, action: str, seed: int | None = None) -> State:
+def transition(state: State, action: str, seed: int) -> State:
     """Deterministic (w.r.t. seed) state transition.
+
+    seed IS REQUIRED — DSECS has zero non-deterministic fallback paths.
 
     A *valid* action nudges the system forward; invalid/noop returns a
     near-identical state (possibly with degraded failure_rate / divergence
     to let CSCO reject it).
     """
-    rng = random.Random(seed) if seed is not None else random.Random()
+    rng = random.Random(seed)
 
     # ------------------------------------------------------------------
     # Every action puts some pressure on the system.

@@ -17,21 +17,21 @@ from ..ledger.store import InMemoryLedger
 def step(state: State, action: str,
          ledger: InMemoryLedger | None = None,
          eps: float = 1e-9,
-         seed: int | None = None) -> State:
+         seed: int = 0) -> State:
     """One step of the deterministic constrained control loop.
 
     Args:
         state:  Current system state.
         action: String action identifier.
-        ledger: Append-only ledger (optional; created if None).
+        ledger: Append-only ledger (optional; None = dry run).
         eps:    GSAI decrease tolerance.
-        seed:   Deterministic RNG seed for transition.
+        seed:   Deterministic RNG seed for transition (REQUIRED).
 
     Returns:
         next_state if it passes CSCO ∧ GSAI monotonic, otherwise *state*.
     """
     candidate = transition(state, action, seed=seed)
-    candidate.transition_seed = seed if seed is not None else -1
+    candidate.transition_seed = seed
 
     # ---- CSCO hard constraint gate ----
     if not CSCO(candidate):
