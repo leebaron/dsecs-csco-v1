@@ -1,0 +1,58 @@
+{
+  "full_dsecs": {
+    "convergence_steps_mean": 13.7,
+    "convergence_steps_std": 6.481512169239521,
+    "convergence_rate": 1.0,
+    "violations_mean": 0.0,
+    "violations_std": 0.0,
+    "violation_rate_pct": 0.0,
+    "final_gsai_mean": 0.5631889821186933,
+    "final_gsai_std": 0.027501475503277594,
+    "entropy_mean": 0.9182958340544897,
+    "entropy_std": 0.0,
+    "ledger_consistency_pct": 100.0,
+    "n_runs": 10
+  },
+  "no_csco": {
+    "convergence_steps_mean": 13.7,
+    "convergence_steps_std": 6.481512169239521,
+    "convergence_rate": 1.0,
+    "violations_mean": 0.0,
+    "violations_std": 0.0,
+    "violation_rate_pct": 0.0,
+    "final_gsai_mean": 0.5631889821186933,
+    "final_gsai_std": 0.027501475503277594,
+    "entropy_mean": 0.9182958340544897,
+    "entropy_std": 0.0,
+    "ledger_consistency_pct": 100.0,
+    "n_runs": 10
+  },
+  "no_consensus": {
+    "convergence_steps_mean": 9.0,
+    "convergence_steps_std": 0.0,
+    "convergence_rate": 1.0,
+    "violations_mean": 0.0,
+    "violations_std": 0.0,
+    "violation_rate_pct": 0.0,
+    "final_gsai_mean": 0.5766371523502652,
+    "final_gsai_std": 0.027108476945101528,
+    "entropy_mean": 0.0,
+    "entropy_std": 0.0,
+    "ledger_consistency_pct": 100.0,
+    "n_runs": 10
+  },
+  "no_ledger": {
+    "convergence_steps_mean": 13.7,
+    "convergence_steps_std": 6.481512169239521,
+    "convergence_rate": 1.0,
+    "violations_mean": 0.0,
+    "violations_std": 0.0,
+    "violation_rate_pct": 0.0,
+    "final_gsai_mean": 0.5631889821186933,
+    "final_gsai_std": 0.027501475503277594,
+    "entropy_mean": 0.9182958340544897,
+    "entropy_std": 0.0,
+    "ledger_consistency_pct": 0.0,
+    "n_runs": 10
+  }
+}

@@ -1,3 +1,16 @@
 __pycache__/
 .pytest_cache/
 *.pyc
+
+# Paper build artifacts
+paper/_build/
+paper/_arxiv_submission/
+paper/dsecs_arxiv_submission.tar.gz
+paper/results/
+paper/code/results/
+paper/*.pdf
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out

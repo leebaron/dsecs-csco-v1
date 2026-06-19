@@ -1,0 +1,26 @@
+{
+  "simulation": {
+    "script": "simulate.py",
+    "exit_code": 0,
+    "stdout": "Simulation ran 6 steps across 3 nodes.\nFinal state hash: 32dc009ad6a655dd\u2026\nFinal GSAI: 1.845087\n\u2705 CI Gate 1: All states satisfy CSCO constraints.\n\u2705 CI Gate 2: GSAI is non-decreasing.\n\u2705 CI Gate 3: Replay is deterministic (hash match).\n\u2705 Replay determinism: MATCH",
+    "stderr": "",
+    "elapsed_s": 0.03,
+    "passed": true
+  },
+  "deterministic": {
+    "script": "deterministic_test.py",
+    "exit_code": 0,
+    "stdout": "\u2705 Determinism test: 5 identical runs, 5 states each.",
+    "stderr": "",
+    "elapsed_s": 0.03,
+    "passed": true
+  },
+  "byzantine": {
+    "script": "byzantine_test.py",
+    "exit_code": 0,
+    "stdout": "Byzantine test: 5 nodes, 1 malicious (33%)\n  Honest majority: 4 > 1 \u2192 CSCO gate should reject all malicious proposals.\n  Ledger length: 12 states\n\u2705 No malicious states leaked into global ledger.\n\u2705 CI Gate 1: All states satisfy CSCO constraints.\n\u2705 CI Gate 2: GSAI is non-decreasing.\n\u2705 CI Gate 3: Replay is deterministic (hash match).\n\u2705 Byzantine test PASSED \u2014 system remains safe under attack.",
+    "stderr": "",
+    "elapsed_s": 0.03,
+    "passed": true
+  }
+}
