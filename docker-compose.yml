@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  node:
+    build: .
+    command: python main.py
+    container_name: dsecs-node
+
+  ledger:
+    image: postgres:15
+    container_name: dsecs-ledger
+    environment:
+      POSTGRES_USER: dsecs
+      POSTGRES_PASSWORD: dsecs
+      POSTGRES_DB: dsecs
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
