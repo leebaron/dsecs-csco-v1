@@ -1,0 +1,20 @@
+This file is a placeholder for the decision audit chain diagram.
+
+Recommended diagram content:
+- Horizontal chain of blocks (like a blockchain)
+- Each block contains: Step, Action, GSAI Score, State Hash, Parent Hash
+- Arrows connecting blocks via parent_hash → hash links
+- Color coding: green for accepted, red for rejected decisions
+
+For generation:
+- Use draw.io / Excalidraw / Mermaid
+- Output as PNG at 1400×300px
+
+Mermaid equivalent:
+```mermaid
+flowchart LR
+    B0[Step 0\nInit State\nHash: a1b2...] --> B1[Step 1\nSYNC\nHash: c3d4...]
+    B1 --> B2[Step 2\nRECOVER\nHash: e5f6...]
+    B2 --> B3[Step 3\nNOOP ⛔\nHash: e5f6...]
+    B2 --> B4[Step 3\nRECOVER\nHash: g7h8...]
+```

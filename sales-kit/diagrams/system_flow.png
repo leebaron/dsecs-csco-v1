@@ -1,0 +1,23 @@
+This file is a placeholder for the system flow diagram.
+
+Recommended diagram content:
+- Three boxes: CSCO (red) → GSAI (green) → Ledger (blue)
+- Arrows between them showing data flow
+- Input arrow from left, Output arrow to right
+- Labels on each box with key metrics
+
+For generation:
+- Use draw.io / Excalidraw / Mermaid
+- Output as PNG at 1200×400px
+
+Mermaid equivalent:
+```mermaid
+flowchart LR
+    A[AI Input] --> B[CSCO\nConstraint Gate]
+    B -- unsafe --> X[❌ REJECTED]
+    B -- safe --> C[GSAI\nBounded Score]
+    C -- score >= 0.5 --> D[Decision Engine]
+    D --> E[Ledger\nImmutable Audit]
+    E --> F[✅ Output]
+    C -- score < 0.5 --> X
+```

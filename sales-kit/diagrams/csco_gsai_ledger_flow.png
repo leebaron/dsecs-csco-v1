@@ -1,0 +1,12 @@
+This file is a placeholder for the CSCO→GSAI→Ledger flow diagram.
+
+Recommended diagram content:
+- Top-to-bottom vertical flow
+- Step 1: CSCO — constraint check (❌ or ✅)
+- Step 2: GSAI — score computation (0.0–1.0)
+- Step 3: Ledger — append to hash chain
+- Show SHA-256 hash values at each step
+
+For generation:
+- Use draw.io / Excalidraw / Mermaid
+- Output as PNG at 800×600px
