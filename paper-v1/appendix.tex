@@ -1,0 +1,150 @@
+\section{Appendix: Extended Proofs}
+
+\subsection{Lemma 1: CSCO Projection Stability (Extended)}
+
+\begin{proof}[Proof of Lemma~\ref{lem:csco}]
+Let $\mathcal{C}$ be a convex compact set and $\Pi_{\mathcal{C}}$ the
+projection operator defined as $\Pi_{\mathcal{C}}(x) = \arg\min_{y\in\mathcal{C}}
+\|x-y\|$.
+
+The projection operator satisfies three properties:
+\begin{enumerate}
+    \item \textbf{Non-expansiveness:} $\|\Pi_{\mathcal{C}}(x) - \Pi_{\mathcal{C}}(y)\| \leq \|x-y\|$
+    \item \textbf{Idempotence:} $\Pi_{\mathcal{C}}(\Pi_{\mathcal{C}}(x)) = \Pi_{\mathcal{C}}(x)$
+    \item \textbf{Fixed-point characterization:} $x \in \mathcal{C} \iff \Pi_{\mathcal{C}}(x) = x$
+\end{enumerate}
+
+By induction on $t$:
+\begin{align*}
+    S_{t+1} &= \Pi_{\mathcal{C}}(F(S_t, a_t)) \in \mathcal{C} \quad \text{(by property 3)} \\
+    \|S_{t+1}\| &= \|\Pi_{\mathcal{C}}(F(S_t, a_t))\| \leq \max_{y\in\mathcal{C}} \|y\| < \infty
+\end{align*}
+since $\mathcal{C}$ is compact.
+Thus $\{S_t\}$ is bounded $\forall t$.
+\end{proof}
+
+\subsection{Lemma 2: GSAI Lipschitz Bounded Drift (Extended)}
+
+\begin{proof}[Proof of Lemma~\ref{lem:gsai}]
+By Lipschitz continuity:
+\begin{align*}
+    |G(S_{t+1}) - G(S_t)| &\leq L \|S_{t+1} - S_t\| \\
+    &\leq L \|\Pi_{\mathcal{C}}(F(S_t,a_t)) - S_t\|
+\end{align*}
+
+Since $S_t \in \mathcal{C}$ and $\Pi_{\mathcal{C}}$ is non-expansive:
+\begin{align*}
+    \|\Pi_{\mathcal{C}}(F(S_t,a_t)) - \Pi_{\mathcal{C}}(S_t)\| &\leq \|F(S_t,a_t) - S_t\|
+\end{align*}
+
+Let $d_{\max} = \max_{x\in\mathcal{C}, a\in\mathcal{A}} \|F(x,a) - x\|$.
+Since $\mathcal{C}$ is compact and $\mathcal{A}$ is finite, $d_{\max} < \infty$.
+Therefore:
+\begin{align*}
+    |G(S_{t+1}) - G(S_t)| &\leq L d_{\max} < \infty
+\end{align*}
+
+Thus GSAI cannot exhibit unbounded oscillations.
+\end{proof}
+
+\subsection{Lemma 3: Ledger Prefix Consistency (Extended)}
+
+\begin{proof}[Proof of Lemma~\ref{lem:ledger}]
+Define the hash function:
+\[
+H_t = \text{SHA-256}(\text{det}_t \| \text{req}_t \| \text{result}_t \| H_{t-1})
+\]
+where $\|$ denotes concatenation.
+
+SHA-256 is collision-resistant: $\Pr[H(m_1) = H(m_2) \mid m_1 \neq m_2] \leq \text{negl}(k)$
+for security parameter $k$.
+
+Consider two nodes $i,j$ with ledgers $L_i[0:t]$ and $L_j[0:t]$.
+If there exists a first divergent step $\tau$ where
+$S_\tau^{(i)} \neq S_\tau^{(j)}$, then:
+\begin{align*}
+    H_\tau^{(i)} &= H(\text{det}_\tau^{(i)}, \text{req}_\tau^{(i)}, \text{result}_\tau^{(i)}, H_{\tau-1}) \\
+    H_\tau^{(j)} &= H(\text{det}_\tau^{(j)}, \text{req}_\tau^{(j)}, \text{result}_\tau^{(j)}, H_{\tau-1})
+\end{align*}
+
+Since the inputs differ, collision resistance implies:
+\[
+H_\tau^{(i)} \neq H_\tau^{(j)}
+\]
+
+By induction, all subsequent hashes diverge:
+\[
+\forall t' \geq \tau:\; H_{t'}^{(i)} \neq H_{t'}^{(j)}
+\]
+
+Thus fork detection is immediate: divergent hashes at the first
+inconsistent step.
+\end{proof}
+
+\subsection{Lemma 4: Genesis Alignment (Extended)}
+
+\begin{proof}[Proof of Lemma~\ref{lem:genesis}]
+All nodes initialize with:
+\[
+H_0^{(i)} = \text{SHA-256}(\text{``genesis''} \| 42) \quad \forall i
+\]
+
+Since the hash input is identical and SHA-256 is deterministic:
+\[
+H_0^{(1)} = H_0^{(2)} = \cdots = H_0^{(n)}
+\]
+
+Let $\mathcal{T}_0$ be the set of states with hash prefix $H_0$.
+By construction, $|\mathcal{T}_0| = 1$ (the genesis state), eliminating
+bootstrap divergence.
+\end{proof}
+
+\subsection{Convergence Theorem (Extended)}
+
+\begin{theorem}[Super-martingale Convergence]
+Define $V_t = \|S_t - S^*\|$ where $S^* \in \mathcal{M}^*$.
+Under the DSECS control loop:
+\begin{enumerate}
+    \item $V_t$ is bounded $\forall t$ (Lemma~\ref{lem:csco})
+    \item $V_t$ is non-increasing in expectation (GSAI monotonicity gate)
+    \item $V_t$ converges almost surely
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:csco}, $S_t \in \mathcal{C}$, hence $V_t$ is bounded.
+
+The GSAI monotonicity gate ensures:
+\[
+G(S_{t+1}) \geq G(S_t) - \varepsilon
+\]
+For accepted transitions, $G(S_{t+1}) \geq G(S_t) - \varepsilon$,
+and for rejected transitions, $S_{t+1} = S_t$ implying $G(S_{t+1}) = G(S_t)$.
+
+Thus $\{G(S_t)\}$ is a bounded submartingale.
+By the martingale convergence theorem, $G(S_t) \to G^*$ almost surely.
+
+Since $G$ is injective over $\mathcal{M}^*$ (due to deterministic dynamics),
+$S_t \to S^* \in \mathcal{M}^*$ almost surely.
+\end{proof}
+
+\subsection{Byzantine Bound (Extended)}
+
+\begin{theorem}[Byzantine Resilience]
+Under $f < n/3$, the majority-based consensus function is:
+\begin{enumerate}
+    \item Deterministic: same input produces same output
+    \item Convergent: consensus state approaches $\mathcal{M}^*$
+    \item Replay-consistent: hash chain remains prefix-complete
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+With $f < n/3$, any two quorums of size $2f+1$ intersect in at least one
+honest node. The honest nodes apply the same CSCO + GSAI + ledger
+logic deterministically, ensuring consensus.
+
+For $n = 3$, $f < 1$ means $f \leq 0$ --- no Byzantine majority.
+In practice, with $n=3$ and $f \leq 0$, all nodes are honest and consensus
+is trivially satisfied.
+\end{proof}

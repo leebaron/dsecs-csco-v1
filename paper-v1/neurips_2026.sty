@@ -1,0 +1,24 @@
+% NeurIPS 2026 style file (minimal for submission)
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{neurips_2026}[2026/01/01 NeurIPS 2026 submission style]
+
+\RequirePackage[letterpaper,top=1in,left=1in,right=1in,bottom=1in]{geometry}
+\RequirePackage{fancyhdr,lastpage}
+
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small DSECS: Decision System with Constrained Projection}
+\fancyhead[R]{\small NeurIPS 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section]
+
+\renewcommand{\abstractname}{Abstract}
