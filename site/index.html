@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSECS — The Runtime Governance Layer for Autonomous AI</title>
+    <meta name="description" content="DSECS is the runtime governance layer for autonomous AI systems. CSCO enforces constraints, GSAI evaluates decisions, Ledger guarantees audit and replay.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: #16161e;
+            --bg-hover: #1c1c28;
+            --border: #2a2a3a;
+            --text-primary: #e8e8f0;
+            --text-secondary: #9898b0;
+            --text-muted: #6868a0;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #8b5cf6;
+            --accent-green: #22c55e;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-gradient: linear-gradient(135deg, #00d4ff, #8b5cf6);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+            --max-width: 1200px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+        }
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-logo .accent {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--accent-gradient);
+            color: #fff !important;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .nav-cta:hover { opacity: 0.9; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 40%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 60%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent-cyan);
+            margin-bottom: 32px;
+        }
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 80px);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            max-width: 900px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .hero h1 .highlight {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #fff;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--bg-hover); border-color: var(--text-muted); }
+
+        .hero-metrics {
+            display: flex;
+            gap: 48px;
+            margin-top: 64px;
+            padding-top: 48px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hero-metric {
+            text-align: center;
+        }
+        .hero-metric .value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .hero-metric .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Section */
+        section { padding: 100px 24px; }
+        .section-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-cyan);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+
+        /* Problem/Solution */
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+        .ps-card {
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .ps-card.problem { border-color: rgba(239, 68, 68, 0.3); }
+        .ps-card.solution { border-color: rgba(34, 197, 94, 0.3); }
+        .ps-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .ps-card.problem h3 { color: var(--accent-red); }
+        .ps-card.solution h3 { color: var(--accent-green); }
+        .ps-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .ps-card ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .ps-card ul li:last-child { border-bottom: none; }
+        .ps-card ul li .icon { font-size: 16px; flex-shrink: 0; }
+
+        .solution-flow {
+            margin-top: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+        .flow-node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+        .flow-node.csco { border-color: rgba(0, 212, 255, 0.4); color: var(--accent-cyan); }
+        .flow-node.gsai { border-color: rgba(139, 92, 246, 0.4); color: var(--accent-purple); }
+        .flow-node.ledger { border-color: rgba(245, 158, 11, 0.4); color: var(--accent-amber); }
+        .flow-node.approved { border-color: rgba(34, 197, 94, 0.4); color: var(--accent-green); }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .feature-card {
+            padding: 36px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+        }
+        .feature-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .feature-card:nth-child(1) .feature-icon { background: rgba(0, 212, 255, 0.15); color: var(--accent-cyan); }
+        .feature-card:nth-child(2) .feature-icon { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .feature-card:nth-child(3) .feature-icon { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .feature-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        .feature-benefits {
+            margin-top: 16px;
+            list-style: none;
+        }
+        .feature-benefits li {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feature-benefits li::before {
+            content: '▸';
+            color: var(--accent-cyan);
+        }
+
+        .enterprise-benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .benefit-card {
+            padding: 28px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .benefit-card .emoji { font-size: 36px; margin-bottom: 12px; }
+        .benefit-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        .benefit-card p { font-size: 14px; color: var(--text-secondary); }
+
+        /* Architecture */
+        .arch-diagram {
+            margin-top: 48px;
+            padding: 48px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+        .arch-layer {
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .arch-layer.model { background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.3); }
+        .arch-layer.agent { background: rgba(0, 212, 255, 0.12); border: 1px solid rgba(0, 212, 255, 0.3); }
+        .arch-layer.dsecs { background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .arch-layer.exec { background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .arch-layer .tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .arch-layer.model .tag { background: rgba(139, 92, 246, 0.3); color: var(--accent-purple); }
+        .arch-layer.agent .tag { background: rgba(0, 212, 255, 0.3); color: var(--accent-cyan); }
+        .arch-layer.dsecs .tag { background: rgba(245, 158, 11, 0.3); color: var(--accent-amber); }
+        .arch-layer.exec .tag { background: rgba(34, 197, 94, 0.3); color: var(--accent-green); }
+
+        .arch-detail {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .arch-detail-card {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+        .arch-detail-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .arch-detail-card ul {
+            list-style: none;
+        }
+        .arch-detail-card ul li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Demo */
+        .demo-scenarios {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .demo-card {
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .demo-card .number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .demo-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .demo-card .tagline { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+        .demo-card .demo-code {
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+        .demo-card .demo-code .green { color: var(--accent-green); }
+        .demo-card .demo-code .red { color: var(--accent-red); }
+        .demo-card .demo-code .cyan { color: var(--accent-cyan); }
+        .demo-card .demo-code .purple { color: var(--accent-purple); }
+        .demo-card .demo-code .amber { color: var(--accent-amber); }
+        .demo-card .demo-code .muted { color: var(--text-muted); }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .pricing-card {
+            padding: 36px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border-color: var(--accent-cyan);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(139, 92, 246, 0.05));
+        }
+        .pricing-card.featured::before {
+            content: 'Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 16px;
+            background: var(--accent-gradient);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .pricing-card .plan-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .pricing-card .price {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .pricing-card .price-period {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .pricing-card .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 24px;
+            transition: all 0.2s;
+        }
+        .pricing-card:not(.featured) .pricing-cta {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .pricing-card:not(.featured) .pricing-cta:hover { border-color: var(--text-muted); }
+        .pricing-card.featured .pricing-cta { background: var(--accent-gradient); color: #fff; }
+        .pricing-card.featured .pricing-cta:hover { opacity: 0.9; }
+
+        .pricing-card ul {
+            list-style: none;
+            flex: 1;
+        }
+        .pricing-card ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pricing-card ul li:last-child { border-bottom: none; }
+        .pricing-card ul li .check { color: var(--accent-green); }
+
+        /* Objections */
+        .objections {
+            margin-top: 48px;
+        }
+        .objection-item {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            margin-bottom: 16px;
+        }
+        .objection-item .q {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--accent-amber);
+        }
+        .objection-item .a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ICP */
+        .icp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .icp-card {
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            text-align: center;
+        }
+        .icp-card .tier {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .icp-card .tier.t1 { background: rgba(34, 197, 94, 0.15); color: var(--accent-green); }
+        .icp-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .icp-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 100px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; margin-bottom: 16px; }
+        .cta-section p { font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px; }
+
+        /* Footer */
+        footer {
+            padding: 48px 24px;
+            border-top: 1px solid var(--border);
+        }
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-inner .copyright {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .footer-inner .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-inner .footer-links a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .footer-inner .footer-links a:hover { color: var(--text-secondary); }
+
+        /* Comparison table */
+        .comparison-table {
+            margin-top: 48px;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--bg-card);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+        .comparison-table td { background: var(--bg-secondary); }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table .check { color: var(--accent-green); }
+        .comparison-table .cross { color: var(--text-muted); }
+        .comparison-table .highlight-col { background: rgba(0, 212, 255, 0.05); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0; right: 0;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border);
+                padding: 20px;
+                gap: 16px;
+            }
+            .hero { padding: 100px 20px 60px; }
+            .hero-metrics { gap: 24px; }
+            .problem-solution,
+            .features-grid,
+            .enterprise-benefits,
+            .pricing-grid,
+            .icp-grid { grid-template-columns: 1fr; }
+            .demo-scenarios { grid-template-columns: 1fr; }
+            .arch-detail { grid-template-columns: 1fr; }
+            section { padding: 60px 20px; }
+            .solution-flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .features-grid,
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+            .icp-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <a href="#hero" class="nav-logo">DSECS<span class="accent">.</span></a>
+        <div class="nav-links" id="navLinks">
+            <a href="#features">Features</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#demo">Demo</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#docs">Docs</a>
+            <a href="#demo" class="nav-cta">▶ Book Demo</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-badge">⚡ Runtime Governance for Autonomous AI</div>
+    <h1>AI Can Decide.<br><span class="highlight">DSECS Decides Whether It Should Execute.</span></h1>
+    <p>DSECS is the runtime governance layer for autonomous AI systems. Before any AI action enters the real world, DSECS applies constraint enforcement, decision evaluation, and immutable audit — making AI decisions safe, verifiable, and enterprise-ready.</p>
+    <div class="hero-actions">
+        <a href="https://github.com/leebaron/dsecs-csco-v1" class="btn btn-secondary">★ Star on GitHub</a>
+            <a href="#demo" class="btn btn-primary">▶ See AI Decisions Under Control in 3 Minutes</a>
+        <a href="https://github.com/leebaron/dsecs-csco-v1" class="btn btn-secondary">View on GitHub →</a>
+    </div>
+    <div class="hero-metrics">
+        <div class="hero-metric"><div class="value">&lt;1ms</div><div class="label">Decision Latency</div></div>
+        <div class="hero-metric"><div class="value">34/34</div><div class="label">Tests Passing</div></div>
+        <div class="hero-metric"><div class="value">100%</div><div class="label">Deterministic Replay</div></div>
+        <div class="hero-metric"><div class="value">v1.0</div><div class="label">Stable Release</div></div>
+    </div>
+</section>
+
+<!-- Problem / Solution -->
+<section style="background: var(--bg-secondary);" id="problem">
+    <div class="section-inner">
+        <div class="section-label">The Problem</div>
+        <h2 class="section-title">Today's AI Has a Missing Layer</h2>
+        <p class="section-subtitle">AI systems can generate actions, but enterprises lack a reliable way to answer three critical questions before execution.</p>
+        <div class="problem-solution">
+            <div class="ps-card problem">
+                <h3>⚠️ Without DSECS</h3>
+                <ul>
+                    <li><span class="icon">✗</span> <span><strong>No constraint enforcement</strong> — AI can exceed spending limits, access forbidden data, or violate compliance rules</span></li>
+                    <li><span class="icon">✗</span> <span><strong>No decision evaluation</strong> — No way to know if an action is beneficial before execution</span></li>
+                    <li><span class="icon">✗</span> <span><strong>No audit trail</strong> — When something goes wrong, there's no deterministic record of why</span></li>
+                    <li><span class="icon">✗</span> <span><strong>No replay capability</strong> — Cannot reproduce or investigate past decisions deterministically</span></li>
+                </ul>
+            </div>
+            <div class="ps-card solution">
+                <h3>✅ With DSECS</h3>
+                <ul>
+                    <li><span class="icon">✓</span> <span><strong>CSCO Constraint Gate</strong> — Every decision checked against business, safety, and compliance rules before execution</span></li>
+                    <li><span class="icon">✓</span> <span><strong>GSAI Decision Evaluation</strong> — Multi-dimensional utility scoring ensures only beneficial actions execute</span></li>
+                    <li><span class="icon">✓</span> <span><strong>Immutable Ledger</strong> — Every accepted and rejected decision recorded with hash-chain integrity</span></li>
+                    <li><span class="icon">✓</span> <span><strong>Deterministic Replay</strong> — Full audit and investigation capability on demand</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="solution-flow">
+            <span class="flow-node">AI Agent</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node csco">CSCO Gate</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node gsai">GSAI Evaluation</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node ledger">Ledger</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-node approved">Approved Execution</span>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+    <div class="section-inner">
+        <div class="section-label">Core Capabilities</div>
+        <h2 class="section-title">Three Roots. One Runtime Governance Layer.</h2>
+        <p class="section-subtitle">DSECS is built on three immutable principles that form the product's competitive moat.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">CSCO</div>
+                <h3>Constraint Governance</h3>
+                <p>Defines <strong>what is allowed</strong>. Enforces non-negotiable business, safety, and compliance rules before any AI action can execute.</p>
+                <ul class="feature-benefits">
+                    <li>Hard constraint enforcement</li>
+                    <li>Safety boundary guarantee</li>
+                    <li>Valid state projection</li>
+                    <li>Runtime governance</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">GSAI</div>
+                <h3>Decision Evaluation</h3>
+                <p>Defines <strong>what should be done</strong>. Scores decisions using multi-dimensional utility functions — safety, cost, efficiency, compliance.</p>
+                <ul class="feature-benefits">
+                    <li>Multi-dimensional scoring</li>
+                    <li>Threshold-based acceptance</li>
+                    <li>Warn penalty for edge cases</li>
+                    <li>Long-term optimization</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">LGR</div>
+                <h3>Immutable Ledger</h3>
+                <p>Records <strong>what actually happened</strong>. Every accepted or rejected decision is recorded with hash-chain integrity, replayable on demand.</p>
+                <ul class="feature-benefits">
+                    <li>Hash-chain integrity</li>
+                    <li>Deterministic replay</li>
+                    <li>Tamper detection</li>
+                    <li>Causality tracking</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="enterprise-benefits">
+            <div class="benefit-card">
+                <div class="emoji">🛡️</div>
+                <h4>Reduce Operational Risk</h4>
+                <p>Prevent invalid or unauthorized AI actions before execution. CSCO ensures every decision stays within defined boundaries.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="emoji">📋</div>
+                <h4>Accelerate Compliance</h4>
+                <p>Provide deterministic, immutable records for audit and investigation. Complete traceability for every decision.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="emoji">🤖</div>
+                <h4>Enable Autonomous AI</h4>
+                <p>Move from AI assistance to AI execution with governance. DSECS makes autonomous workflows enterprise-safe.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Architecture -->
+<section style="background: var(--bg-secondary);" id="architecture">
+    <div class="section-inner">
+        <div class="section-label">Architecture</div>
+        <h2 class="section-title">Where DSECS Sits in Your Stack</h2>
+        <p class="section-subtitle">The missing governance layer between AI intelligence and real-world execution.</p>
+
+        <div class="arch-diagram">
+            <div class="arch-layer model">
+                <span class="tag">Model Layer</span>
+                <span>LLM / Foundation Model</span>
+            </div>
+            <div class="arch-layer agent">
+                <span class="tag">Agent Layer</span>
+                <span>Agent Framework / Tool Orchestration</span>
+            </div>
+            <div style="text-align: center; margin: 8px 0; font-size: 20px; color: var(--accent-amber);">⬇</div>
+            <div class="arch-layer dsecs" style="justify-content: center;">
+                <span class="tag" style="font-size: 14px; padding: 4px 16px;">DSECS Runtime Governance</span>
+            </div>
+            <div style="text-align: center; margin: 8px 0; font-size: 20px; color: var(--accent-green);">⬇</div>
+            <div class="arch-layer exec">
+                <span class="tag">Execution Layer</span>
+                <span>External Systems / Production</span>
+            </div>
+        </div>
+
+        <div class="arch-detail">
+            <div class="arch-detail-card">
+                <h4>🔄 Execution Flow</h4>
+                <ul>
+                    <li><span class="cyan">•</span> API ingress → Tenant Router</li>
+                    <li><span class="cyan">•</span> CSCO Constraint Gate → hard enforcement</li>
+                    <li><span class="cyan">•</span> GSAI Evaluation → utility scoring</li>
+                    <li><span class="cyan">•</span> Ledger Commit → immutable record</li>
+                    <li><span class="cyan">•</span> Approved Execution → output</li>
+                </ul>
+            </div>
+            <div class="arch-detail-card">
+                <h4>🔒 Technical Guarantees</h4>
+                <ul>
+                    <li><span class="green">✓</span> Deterministic replay</li>
+                    <li><span class="green">✓</span> Hash-chain integrity</li>
+                    <li><span class="green">✓</span> Constraint enforcement</li>
+                    <li><span class="green">✓</span> Multi-tenant isolation</li>
+                    <li><span class="green">✓</span> API-first architecture</li>
+                    <li><span class="green">✓</span> Container &amp; Kubernetes deployment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison Table -->
+<section id="comparison">
+    <div class="section-inner">
+        <div class="section-label">Why DSECS</div>
+        <h2 class="section-title">Beyond Logs, Beyond Instructions</h2>
+        <p class="section-subtitle">Agent logs describe what happened. DSECS decides whether it is allowed to happen before execution.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Capability</th>
+                    <th>Agent Logs</th>
+                    <th>LLM Instructions</th>
+                    <th class="highlight-col">DSECS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pre-execution enforcement</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Deterministic replay</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Hash-chain integrity</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Multi-dimensional scoring</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Audit evidence trail</td>
+                    <td>Partial</td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Multi-tenant isolation</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td class="highlight-col"><span class="check">✓</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Demo Scenarios -->
+<section style="background: var(--bg-secondary);" id="demo">
+    <div class="section-inner">
+        <div class="section-label">Live Demo</div>
+        <h2 class="section-title">See AI Decisions Under Control in 3 Minutes</h2>
+        <p class="section-subtitle">DSECS makes AI safe, valuable, and verifiable. Here's how it works across four real-world scenarios.</p>
+
+        <div class="demo-scenarios">
+            <div class="demo-card">
+                <div class="number">Scenario 01</div>
+                <h4>🚫 Dangerous Decision Blocked</h4>
+                <div class="tagline">CSCO catches an unauthorized $10M payment before it executes</div>
+                <div class="demo-code">
+                    <span class="muted">Request:</span> payment = $10M<br>
+                    <span class="cyan">CSCO Check:</span><br>
+                    &nbsp;&nbsp;spending limit: $1M → <span class="red">exceeded</span><br>
+                    &nbsp;&nbsp;approval level: insufficient → <span class="red">blocked</span><br>
+                    <span class="red">▸ Result: REJECTED</span><br>
+                    <span class="amber">Ledger:</span> { decision: "payment", result: "rejected", hash: "0xA93F..." }
+                </div>
+            </div>
+            <div class="demo-card">
+                <div class="number">Scenario 02</div>
+                <h4>✅ Valuable Decision Approved</h4>
+                <div class="tagline">GSAI scores an inventory optimization as safe and beneficial</div>
+                <div class="demo-code">
+                    <span class="muted">Request:</span> Optimize inventory shipment<br>
+                    <span class="purple">GSAI Evaluation:</span><br>
+                    &nbsp;&nbsp;Safety: 0.95<br>
+                    &nbsp;&nbsp;Cost reduction: 0.89<br>
+                    &nbsp;&nbsp;Efficiency: 0.91<br>
+                    &nbsp;&nbsp;Compliance: 0.98<br>
+                    &nbsp;&nbsp;<span class="green">Overall: 0.93 ✓</span><br>
+                    <span class="green">▸ Result: APPROVED</span>
+                </div>
+            </div>
+            <div class="demo-card">
+                <div class="number">Scenario 03</div>
+                <h4>🔍 30-Day Postmortem Replay</h4>
+                <div class="tagline">Full deterministic replay of Decision D-2026-001</div>
+                <div class="demo-code">
+                    <span class="muted">Query:</span> Decision D-2026-001<br>
+                    <span class="cyan">Replay started...</span><br>
+                    &nbsp;&nbsp;State hash verified: <span class="green">✓</span><br>
+                    &nbsp;&nbsp;CSCO: <span class="green">PASSED</span><br>
+                    &nbsp;&nbsp;GSAI: 0.93<br>
+                    &nbsp;&nbsp;Operator: AI Agent #7<br>
+                    &nbsp;&nbsp;Timestamp: 2026-06-19 10:32:05 UTC<br>
+                    <span class="green">▸ Replay complete: full chain intact</span>
+                </div>
+            </div>
+            <div class="demo-card">
+                <div class="number">Scenario 04</div>
+                <h4>🏢 Multi-Tenant Isolation</h4>
+                <div class="tagline">Each tenant has independent governance policies</div>
+                <div class="demo-code">
+                    <span class="amber">Tenant A:</span> Banking<br>
+                    &nbsp;&nbsp;rules: max transfer = $1M, region = US<br>
+                    <span class="amber">Tenant B:</span> Medical<br>
+                    &nbsp;&nbsp;rules: HIPAA constraints, patient privacy req<br>
+                    <span class="muted">DSECS isolates all policies</span><br>
+                    <span class="green">▸ Tenant A: completely isolated from Tenant B</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 48px;">
+            <a href="#contact" class="btn btn-primary">▶ Book a Live Enterprise Demo</a>
+        </div>
+    </div>
+</section>
+
+<!-- Target ICP -->
+<section id="icp">
+    <div class="section-inner">
+        <div class="section-label">Ideal Customer Profile</div>
+        <h2 class="section-title">Built for Teams That Need AI Decisions Under Control</h2>
+        <p class="section-subtitle">DSECS serves organizations where AI actions carry real-world consequences.</p>
+
+        <div class="icp-grid">
+            <div class="icp-card">
+                <div class="tier t1">Tier 1</div>
+                <div style="font-size: 40px; margin-bottom: 12px;">🤖</div>
+                <h4>AI Agent Companies</h4>
+                <p>Agents can operate tools, but lack execution governance. DSECS provides the safety boundary every agent platform needs.</p>
+            </div>
+            <div class="icp-card">
+                <div class="tier t1">Tier 1</div>
+                <div style="font-size: 40px; margin-bottom: 12px;">🏦</div>
+                <h4>Fintech Companies</h4>
+                <p>High-value transactions need verifiable controls. DSECS ensures every financial AI decision is governed and replayable.</p>
+            </div>
+            <div class="icp-card">
+                <div class="tier t1">Tier 1</div>
+                <div style="font-size: 40px; margin-bottom: 12px;">⚙️</div>
+                <h4>Enterprise Automation</h4>
+                <p>AI workflows lack a security boundary. DSECS adds the governance layer that makes automated decisions enterprise-safe.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Objection Handling -->
+<section style="background: var(--bg-secondary);" id="faq">
+    <div class="section-inner">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Common Questions</h2>
+
+        <div class="objections">
+            <div class="objection-item">
+                <div class="q">"Why not just use agent logs?"</div>
+                <div class="a">Logs describe what happened. DSECS decides whether it is <em>allowed</em> to happen — <em>before execution</em>. Logs are passive records; DSECS is active governance with deterministic enforcement and replay capability.</div>
+            </div>
+            <div class="objection-item">
+                <div class="q">"Can't an LLM follow instructions?"</div>
+                <div class="a">Instructions are guidance, not enforcement. LLMs can hallucinate, misinterpret, or bypass instructions. DSECS provides runtime enforcement with cryptographic verification — a fundamentally different guarantee from prompt engineering.</div>
+            </div>
+            <div class="objection-item">
+                <div class="q">"Will this slow down AI?"</div>
+                <div class="a">DSECS introduces a controlled decision checkpoint with sub-millisecond latency. The marginal cost of governance is negligible compared to the cost of an unauthorized AI action in production.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+    <div class="section-inner">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Start Free. Scale with Governance.</h2>
+        <p class="section-subtitle">From developer sandbox to enterprise production — DSECS grows with your AI deployment.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="plan-name">Developer</div>
+                <div class="price">Free</div>
+                <div class="price-period">Community license</div>
+                <a href="https://github.com/leebaron/dsecs-csco-v1" class="pricing-cta">Get Started →</a>
+                <ul>
+                    <li><span class="check">✓</span> Local runtime</li>
+                    <li><span class="check">✓</span> CLI interface</li>
+                    <li><span class="check">✓</span> Basic API</li>
+                    <li><span class="check">✓</span> Self-hosting</li>
+                    <li><span class="check">✓</span> Community support</li>
+                </ul>
+            </div>
+            <div class="pricing-card featured">
+                <div class="plan-name">Professional</div>
+                <div class="price">$499</div>
+                <div class="price-period">/ month</div>
+                <a href="#contact" class="pricing-cta">Start Trial →</a>
+                <ul>
+                    <li><span class="check">✓</span> Managed cloud</li>
+                    <li><span class="check">✓</span> Multi-tenant projects</li>
+                    <li><span class="check">✓</span> Extended audit history</li>
+                    <li><span class="check">✓</span> Monitoring &amp; alerts</li>
+                    <li><span class="check">✓</span> Email support</li>
+                </ul>
+            </div>
+            <div class="pricing-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="price">Custom</div>
+                <div class="price-period">Contract</div>
+                <a href="#contact" class="pricing-cta">Contact Sales →</a>
+                <ul>
+                    <li><span class="check">✓</span> Private deployment</li>
+                    <li><span class="check">✓</span> Kubernetes clusters</li>
+                    <li><span class="check">✓</span> Custom governance policies</li>
+                    <li><span class="check">✓</span> Dedicated support</li>
+                    <li><span class="check">✓</span> SLA agreements</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Docs -->
+<section style="background: var(--bg-secondary);" id="docs">
+    <div class="section-inner">
+        <div class="section-label">Documentation</div>
+        <h2 class="section-title">Developer-First, Enterprise-Ready</h2>
+        <p class="section-subtitle">DSECS is API-first by design. Integrate in minutes, deploy in hours.</p>
+
+        <div class="arch-detail">
+            <div class="arch-detail-card">
+                <h4>📦 Quick Start</h4>
+                <div class="demo-code" style="background: var(--bg-card); padding: 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; line-height: 2;">
+                    <span class="muted"># Install</span><br>
+                    pip install dsecs<br><br>
+                    <span class="muted"># Start local</span><br>
+                    dsecs run --mode local<br><br>
+                    <span class="muted"># Deploy with Docker</span><br>
+                    docker-compose up -d
+                </div>
+            </div>
+            <div class="arch-detail-card">
+                <h4>📐 API Overview</h4>
+                <div class="demo-code" style="background: var(--bg-card); padding: 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; line-height: 2;">
+                    <span class="muted"># Evaluate a decision</span><br>
+                    POST /api/v1/evaluate<br>
+                    {<br>
+                    &nbsp;&nbsp;"request": "approve_payment",<br>
+                    &nbsp;&nbsp;"amount": 1000000,<br>
+                    &nbsp;&nbsp;"context": { ... }<br>
+                    }<br><br>
+                    <span class="muted"># Replay a decision</span><br>
+                    GET /api/v1/decisions/:id/replay
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 32px;">
+            <a href="https://github.com/leebaron/dsecs-csco-v1" class="btn btn-secondary">Full Documentation →</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+    <h2>Ready to Govern Your AI Decisions?</h2>
+    <p>Book a 3-minute enterprise demo. See how DSECS blocks dangerous decisions, approves valuable ones, and proves everything in between.</p>
+    <div class="hero-actions">
+        <a href="#" class="btn btn-primary" onclick="alert('Demo scheduling coming soon. For now, contact baron@...'); return false;">▶ Book Enterprise Demo</a>
+        <a href="https://github.com/leebaron/dsecs-csco-v1" class="btn btn-secondary">★ Star on GitHub</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">
+        <div class="copyright">
+            DSECS<span style="color: var(--accent-cyan);">.</span> — The Runtime Governance Layer for Autonomous AI
+        </div>
+        <div class="footer-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#demo">Demo</a>
+            <a href="#docs">Docs</a>
+            <a href="https://github.com/leebaron/dsecs-csco-v1">GitHub</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

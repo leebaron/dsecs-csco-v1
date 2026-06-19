@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSECS — One-Pager | Runtime Governance for Autonomous AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Inter', -apple-system, sans-serif;
+        background: #0a0a0f;
+        color: #e8e8f0;
+        line-height: 1.6;
+        padding: 32px;
+    }
+    .page {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #111118;
+        border-radius: 16px;
+        padding: 48px;
+        border: 1px solid #2a2a3a;
+    }
+    @media print {
+        body { background: #fff; color: #000; padding: 0; }
+        .page { background: #fff; border: none; box-shadow: none; padding: 24px; border-radius: 0; }
+        .badge, .card, .bar { border-color: #ddd; }
+        .text-muted { color: #666; }
+        .accent { color: #059669; }
+        .highlight { background: transparent !important; }
+    }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .logo { font-size: 24px; font-weight: 800; }
+    .logo span { color: #00d4ff; }
+    .tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 12px; border-radius: 100px; border: 1px solid #2a2a3a; display: inline-block; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
+    .subtitle { font-size: 16px; color: #9898b0; margin-bottom: 32px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .card { padding: 20px; border-radius: 12px; border: 1px solid #2a2a3a; background: #16161e; }
+    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .card p { font-size: 13px; color: #9898b0; line-height: 1.6; }
+    .card ul { list-style: none; }
+    .card ul li { font-size: 13px; color: #9898b0; padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+    .card ul li::before { content: '▸'; color: #00d4ff; }
+    .problem { border-color: rgba(239,68,68,0.3); }
+    .solution { border-color: rgba(34,197,94,0.3); }
+    .bar { margin: 24px 0; border: none; border-top: 1px solid #2a2a3a; }
+    .flow { font-family: 'SF Mono', 'Courier New', monospace; font-size: 12px; padding: 16px; border-radius: 8px; background: #0a0a0f; border: 1px solid #2a2a3a; line-height: 2; margin-bottom: 24px; }
+    .flow .g { color: #22c55e; } .flow .r { color: #ef4444; } .flow .c { color: #00d4ff; } .flow .p { color: #8b5cf6; } .flow .a { color: #f59e0b; } .flow .m { color: #6868a0; }
+    .metric-group { display: flex; gap: 32px; margin: 24px 0; flex-wrap: wrap; }
+    .metric { text-align: center; }
+    .metric .v { font-size: 28px; font-weight: 800; }
+    .metric .l { font-size: 12px; color: #6868a0; }
+    .section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #00d4ff; margin-bottom: 16px; }
+    .footer-text { font-size: 12px; color: #6868a0; text-align: center; margin-top: 24px; }
+    @media (max-width: 640px) {
+        body { padding: 16px; }
+        .page { padding: 24px; }
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        .header { flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+<div class="page">
+
+    <div class="header">
+        <div>
+            <div class="logo">DSECS<span>.</span></div>
+            <div style="font-size: 12px; color: #6868a0; margin-top: 4px;">Runtime Governance Layer for Autonomous AI</div>
+        </div>
+        <div class="tag">v1.0 — Stable Release</div>
+    </div>
+
+    <h1>AI Can Decide. DSECS Decides Whether It Should Execute.</h1>
+    <p class="subtitle">
+        Before any AI action enters the real world, DSECS applies constraint enforcement, decision evaluation, and immutable audit — making AI decisions safe, verifiable, and enterprise-ready.
+    </p>
+
+    <div class="grid-2">
+        <div class="card problem">
+            <h3 style="color:#ef4444;">⚠️ The Problem</h3>
+            <p>Today's AI systems generate actions, but enterprises lack a reliable way to answer three critical questions:</p>
+            <ul style="margin-top:12px;">
+                <li><strong>Is this action allowed?</strong></li>
+                <li><strong>Is this action beneficial?</strong></li>
+                <li><strong>Can we prove why it happened?</strong></li>
+            </ul>
+            <p style="margin-top:12px;">Without these answers, AI cannot safely control critical workflows.</p>
+        </div>
+        <div class="card solution">
+            <h3 style="color:#22c55e;">✅ The DSECS Solution</h3>
+            <div class="flow" style="margin-bottom:0;">
+<span class="m">AI Agent</span><br>
+<span class="a">→</span> <span class="c">CSCO Constraint Gate</span> — <span class="m">What is allowed</span><br>
+<span class="a">→</span> <span class="p">GSAI Decision Evaluation</span> — <span class="m">What should be done</span><br>
+<span class="a">→</span> <span class="a">Immutable Ledger</span> — <span class="m">What can be proven</span><br>
+<span class="g">→ Approved Execution ✓</span>
+            </div>
+        </div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="section-title">Core Capabilities</div>
+    <div class="grid-3">
+        <div class="card">
+            <h3><span style="color:#00d4ff;">⬡</span> CSCO — Constraint Governance</h3>
+            <p>Enforces non-negotiable business, safety, and compliance rules before execution. Every decision checked against spending limits, approval levels, and policy boundaries.</p>
+        </div>
+        <div class="card">
+            <h3><span style="color:#8b5cf6;">⬡</span> GSAI — Decision Quality</h3>
+            <p>Scores decisions using multi-dimensional utility functions: safety, cost reduction, efficiency gain, compliance. Only beneficial decisions pass the threshold.</p>
+        </div>
+        <div class="card">
+            <h3><span style="color:#f59e0b;">⬡</span> Ledger — Accountability</h3>
+            <p>Every accepted or rejected decision recorded with hash-chain integrity. Full deterministic replay for audit, investigation, and compliance.</p>
+        </div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="section-title">Enterprise Benefits</div>
+    <div class="grid-3">
+        <div class="card"><h3>🛡️ Reduce Risk</h3><p>Prevent invalid or unauthorized AI actions before execution. CSCO ensures every decision stays within defined boundaries.</p></div>
+        <div class="card"><h3>📋 Accelerate Compliance</h3><p>Deterministic, immutable records for every decision. Complete traceability for audit and investigation.</p></div>
+        <div class="card"><h3>🤖 Enable Autonomous AI</h3><p>Move from AI assistance to AI execution with governance. DSECS makes autonomous workflows enterprise-safe.</p></div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="section-title">Technical Guarantees</div>
+    <div class="grid-3">
+        <div class="card"><h3>🔒 Deterministic Replay</h3><p>Same input always produces the same result. Full reproducibility for every decision.</p></div>
+        <div class="card"><h3>🔗 Hash-Chain Integrity</h3><p>Cryptographic linking of all decisions. Tamper detection at every step.</p></div>
+        <div class="card"><h3>🏗️ Multi-Tenant Isolation</h3><p>Each tenant has independent governance policies and isolated audit trails.</p></div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="section-title">Target Market</div>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:16px;">
+        <div style="flex:1; min-width:200px; padding:12px 16px; border-radius:8px; border:1px solid #2a2a3a; background:#16161e;"><strong>🤖 AI Agent Companies</strong><br><span style="font-size:13px;color:#9898b0;">Agents operate tools, need execution governance</span></div>
+        <div style="flex:1; min-width:200px; padding:12px 16px; border-radius:8px; border:1px solid #2a2a3a; background:#16161e;"><strong>🏦 Fintech Companies</strong><br><span style="font-size:13px;color:#9898b0;">High-value transactions need verifiable controls</span></div>
+        <div style="flex:1; min-width:200px; padding:12px 16px; border-radius:8px; border:1px solid #2a2a3a; background:#16161e;"><strong>⚙️ Enterprise Automation</strong><br><span style="font-size:13px;color:#9898b0;">AI workflows need a security boundary</span></div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="metric-group">
+        <div class="metric"><div class="v">&lt;1ms</div><div class="l">Decision Latency</div></div>
+        <div class="metric"><div class="v">34/34</div><div class="l">Tests Passing</div></div>
+        <div class="metric"><div class="v">100%</div><div class="l">Deterministic Replay</div></div>
+        <div class="metric"><div class="v">v1.0</div><div class="l">Stable Release</div></div>
+        <div class="metric"><div class="v">Free</div><div class="l">Community / $499 Pro</div></div>
+    </div>
+
+    <hr class="bar">
+
+    <div class="footer-text">
+        DSECS. — The Runtime Governance Layer for Autonomous AI<br>
+        github.com/leebaron/dsecs-csco-v1
+    </div>
+</div>
+</body>
+</html>
